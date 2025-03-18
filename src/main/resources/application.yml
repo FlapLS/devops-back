@@ -1,0 +1,26 @@
+spring:
+  application:
+    name: Spacemarine-Service
+  datasource:
+    url: jdbc:h2:mem:testdb
+    username: sa
+    password: password
+    driverClassName: org.h2.Driver
+    jpa:
+      database-platform: org.hibernate.dialect.H2Dialect
+  test:
+    ignore-configuration-validation: true
+  jpa:
+    generate-ddl: true
+    hibernate:
+      ddl-auto: update
+    open-in-view: false
+
+  h2:
+    console:
+      path: /h2-console
+      settings.trace: false
+      settings.web-allow-others: false
+      enabled: true
+server:
+  port: 8080
