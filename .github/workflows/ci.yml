@@ -45,8 +45,8 @@ jobs:
       - name: Download Artifact
         uses: actions/download-artifact@v4
         with:
-          name: build-artifact
-          path: target
+          name: DevOpsBackend
+          path: target/*.jar
 
       - name: Run Tests
         run: mvn test
