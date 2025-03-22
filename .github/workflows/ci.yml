@@ -1,65 +1,24 @@
-name: Java CI with Maven
+name: Spring Boot CI
 
 on:
   push:
-    branches:
-      - master
+    branches: [ main ]
   pull_request:
-    branches:
-      - master
-
-env:
-  MAVEN_CLI_OPTS: "-DskipTests"
-  MAVEN_OPTS: "-Dmaven.repo.local=.m2/repository"
+    branches: [ main ]
 
 jobs:
-  build_backend:
+  build:
     runs-on: ubuntu-latest
-    container: maven:3.9.6-amazoncorretto-17
 
     steps:
       - name: Checkout code
         uses: actions/checkout@v3
 
-      - name: Cache Maven dependencies
-        uses: actions/cache@v3
+      - name: Set up JDK 17
+        uses: actions/setup-java@v3
         with:
-          path: .m2/repository
-          key: maven-repo-${{ hashFiles('**/pom.xml') }}
-          restore-keys: |
-            maven-repo-
+          java-version: '17'
+          distribution: 'temurin'
 
       - name: Build with Maven
-        run: mvn $MAVEN_CLI_OPTS clean package
-
-      - name: Upload artifact
-        uses: actions/upload-artifact@v3
-        with:
-          name: target
-          path: target/*.jar
-
-  test_backend:
-    runs-on: ubuntu-latest
-    container: maven:3.9.6-amazoncorretto-17
-    needs: build_backend
-
-    steps:
-      - name: Download artifact from build job
-        uses: actions/download-artifact@v3
-        with:
-          name: target
-          path: target
-
-      - name: Checkout code
-        uses: actions/checkout@v3
-
-      - name: Cache Maven dependencies
-        uses: actions/cache@v3
-        with:
-          path: .m2/repository
-          key: maven-repo-${{ hashFiles('**/pom.xml') }}
-          restore-keys: |
-            maven-repo-
-
-      - name: Run tests
-        run: mvn $MAVEN_CLI_OPTS test
+        run: mvn clean package
