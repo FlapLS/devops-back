@@ -18,6 +18,17 @@ jobs:
     container: maven:3.9.6-amazoncorretto-17
 
     steps:
+      - name: Checkout code
+        uses: actions/checkout@v3
+
+      - name: Cache Maven dependencies
+        uses: actions/cache@v3
+        with:
+          path: .m2/repository
+          key: maven-repo-${{ hashFiles('**/pom.xml') }}
+          restore-keys: |
+            maven-repo-
+
       - name: Build with Maven
         run: mvn $MAVEN_CLI_OPTS clean package
 
@@ -26,3 +37,29 @@ jobs:
         with:
           name: target
           path: target/*.jar
+
+  test_backend:
+    runs-on: ubuntu-latest
+    container: maven:3.9.6-amazoncorretto-17
+    needs: build_backend
+
+    steps:
+      - name: Download artifact from build job
+        uses: actions/download-artifact@v3
+        with:
+          name: target
+          path: target
+
+      - name: Checkout code
+        uses: actions/checkout@v3
+
+      - name: Cache Maven dependencies
+        uses: actions/cache@v3
+        with:
+          path: .m2/repository
+          key: maven-repo-${{ hashFiles('**/pom.xml') }}
+          restore-keys: |
+            maven-repo-
+
+      - name: Run tests
+        run: mvn $MAVEN_CLI_OPTS test
