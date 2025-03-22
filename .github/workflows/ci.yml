@@ -21,9 +21,3 @@ jobs:
 
       - name: Build with Maven
         run: mvn clean "-DskipTests" package
-
-      - name: Upload build artifacts
-        uses: actions/upload-artifact@v3
-        with:
-          name: build-output
-          path: target/  # Path to the build output directory
