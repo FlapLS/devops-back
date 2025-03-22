@@ -25,5 +25,5 @@ jobs:
       - name: Upload Artifact
         uses: actions/upload-artifact@v3
         with:
-          name: target
-          path: target/
+          name: spring-boot-app
+          path: target/*.jar
