@@ -1,35 +1,39 @@
-stages:
-  - build
-  - test
+name: Java CI with Maven
 
-variables:
+on:
+  push:
+    branches:
+      - master
+  pull_request:
+    branches:
+      - master
+
+env:
   MAVEN_CLI_OPTS: "-DskipTests"
   MAVEN_OPTS: "-Dmaven.repo.local=.m2/repository"
 
-default:
-  image: maven:3.9.6-amazoncorretto-17
-  tags:
-    - mvn-java
-  cache:
-    paths:
-      - .m2/repository/
-      - target/
+jobs:
+  build_backend:
+    runs-on: ubuntu-latest
+    container: maven:3.9.6-amazoncorretto-17
 
-build_backend:
-  stage: build
-  script:
-    - mvn $MAVEN_CLI_OPTS clean package
-  artifacts:
-    paths:
-      - target/*.jar
-  only:
-    - master
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v3
 
-test_backend:
-  stage: test
-  script:
-    - mvn $MAVEN_CLI_OPTS test
-  needs:
-    ["build_backend"]
-  only:
-    - master
+      - name: Cache Maven dependencies
+        uses: actions/cache@v3
+        with:
+          path: .m2/repository
+          key: maven-repo-${{ hashFiles('**/pom.xml') }}
+          restore-keys: |
+            maven-repo-
+
+      - name: Build with Maven
+        run: mvn $MAVEN_CLI_OPTS clean package
+
+      - name: Upload artifact
+        uses: actions/upload-artifact@v3
+        with:
+          name: target
+          path: target/*.jar
