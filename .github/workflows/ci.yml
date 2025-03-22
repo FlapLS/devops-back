@@ -1,0 +1,35 @@
+stages:
+  - build
+  - test
+
+variables:
+  MAVEN_CLI_OPTS: "-DskipTests"
+  MAVEN_OPTS: "-Dmaven.repo.local=.m2/repository"
+
+default:
+  image: maven:3.9.6-amazoncorretto-17
+  tags:
+    - mvn-java
+  cache:
+    paths:
+      - .m2/repository/
+      - target/
+
+build_backend:
+  stage: build
+  script:
+    - mvn $MAVEN_CLI_OPTS clean package
+  artifacts:
+    paths:
+      - target/*.jar
+  only:
+    - master
+
+test_backend:
+  stage: test
+  script:
+    - mvn $MAVEN_CLI_OPTS test
+  needs:
+    ["build_backend"]
+  only:
+    - master

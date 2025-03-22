@@ -2,25 +2,18 @@ spring:
   application:
     name: Spacemarine-Service
   datasource:
-    url: jdbc:h2:mem:testdb
-    username: sa
-    password: password
-    driverClassName: org.h2.Driver
+    url: jdbc:postgresql://localhost:5432/paint
+    username: postgres
+    password: 123
+    driverClassName: org.postgresql.Driver
     jpa:
-      database-platform: org.hibernate.dialect.H2Dialect
+      database-platform: org.hibernate.dialect.PostgreSQLDialect
   test:
-    ignore-configuration-validation: true
+    ignore-configuration-validation:
   jpa:
     generate-ddl: true
     hibernate:
       ddl-auto: update
     open-in-view: false
-
-  h2:
-    console:
-      path: /h2-console
-      settings.trace: false
-      settings.web-allow-others: false
-      enabled: true
 server:
   port: 8080
