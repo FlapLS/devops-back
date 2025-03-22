@@ -18,17 +18,6 @@ jobs:
     container: maven:3.9.6-amazoncorretto-17
 
     steps:
-      - name: Checkout code
-        uses: actions/checkout@v3
-
-      - name: Cache Maven dependencies
-        uses: actions/cache@v3
-        with:
-          path: .m2/repository
-          key: maven-repo-${{ hashFiles('**/pom.xml') }}
-          restore-keys: |
-            maven-repo-
-
       - name: Build with Maven
         run: mvn $MAVEN_CLI_OPTS clean package
 
