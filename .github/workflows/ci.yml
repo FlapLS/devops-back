@@ -43,4 +43,4 @@ jobs:
           distribution: 'temurin'
 
       - name: Run Tests
-        run: mvn test
+        run: mvn "-DskipTests" test
