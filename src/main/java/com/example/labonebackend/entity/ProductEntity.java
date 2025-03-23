@@ -9,6 +9,7 @@ import lombok.Setter;
 import org.springframework.validation.annotation.Validated;
 
 import java.time.LocalDateTime;
+import java.util.Objects;
 
 @Entity
 @Getter
@@ -59,4 +60,32 @@ public class ProductEntity {
     @Column(name = "actual_amount")
     private Float actualAmount;
 
+    @Override
+    public String toString() {
+        return "ProductEntity{" +
+                "id=" + id +
+                ", article='" + article + '\'' +
+                ", brand=" + brand +
+                ", typeColor=" + typeColor +
+                ", name='" + name + '\'' +
+                ", codeColor='" + codeColor + '\'' +
+                ", creationDate=" + creationDate +
+                ", updateDate=" + updateDate +
+                ", amount=" + amount +
+                ", actualAmount=" + actualAmount +
+                '}';
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+        ProductEntity that = (ProductEntity) o;
+        return Objects.equals(id, that.id) && Objects.equals(article, that.article) && brand == that.brand && typeColor == that.typeColor && Objects.equals(name, that.name) && Objects.equals(codeColor, that.codeColor) && Objects.equals(creationDate, that.creationDate) && Objects.equals(updateDate, that.updateDate) && Objects.equals(amount, that.amount) && Objects.equals(actualAmount, that.actualAmount);
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hash(id, article, brand, typeColor, name, codeColor, creationDate, updateDate, amount, actualAmount);
+    }
 }
