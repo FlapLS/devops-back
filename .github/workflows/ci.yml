@@ -30,18 +30,6 @@ jobs:
   test:
     runs-on: ubuntu-latest
     needs: build  # Зависимость от задачи build
-
-    services:
-      postgres_db:
-        image: postgres
-        env:
-          POSTGRES_USER: postgres
-          POSTGRES_PASSWORD: 123
-          POSTGRES_DB: paint
-        ports:
-          - 5432:5432
-        options: --health-cmd pg_isready --health-interval 10s --health-timeout 5s --health-retries 5
-
     steps:
       - name: Checkout code
         uses: actions/checkout@v4
@@ -53,8 +41,4 @@ jobs:
           distribution: 'temurin'
 
       - name: Run Tests
-        env:
-          SPRING_DATASOURCE_URL: jdbc:postgresql://localhost:5432/paint
-          SPRING_DATASOURCE_USERNAME: postgres
-          SPRING_DATASOURCE_PASSWORD: 123
         run: mvn test
