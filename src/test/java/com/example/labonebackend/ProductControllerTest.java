@@ -43,11 +43,11 @@ class ProductControllerTest {
 
     @Test
     void getAllProducts() throws Exception {
-        // Arrange
+
         ProductDto productDto = new ProductDto();
         when(productService.getAllProducts()).thenReturn(Collections.singletonList(productDto));
 
-        // Act & Assert
+
         mockMvc.perform(get("/products"))
                 .andExpect(status().isOk())
                 .andExpect(jsonPath("$[0]").exists());
@@ -56,12 +56,12 @@ class ProductControllerTest {
 
     @Test
     void getProductById() throws Exception {
-        // Arrange
+
         Long id = 1L;
         ProductDto productDto = new ProductDto();
         when(productService.getProductById(id)).thenReturn(productDto);
 
-        // Act & Assert
+
         mockMvc.perform(get("/products/{id}", id))
                 .andExpect(status().isOk())
                 .andExpect(jsonPath("$").exists());
@@ -70,7 +70,7 @@ class ProductControllerTest {
 
     @Test
     void createProduct() throws Exception {
-        // Arrange
+
         ProductEntity productEntity = new ProductEntity();
         productEntity.setId(1L);
         productEntity.setArticle("12345");
@@ -83,7 +83,7 @@ class ProductControllerTest {
 
         when(productService.createProduct(productEntity)).thenReturn(productEntity);
 
-        // Act & Assert
+
         mockMvc.perform(post("/products")
                         .contentType(MediaType.APPLICATION_JSON)
                         .content(objectMapper.writeValueAsString(productEntity)))
@@ -93,7 +93,7 @@ class ProductControllerTest {
 
     @Test
     void updateProduct() throws Exception {
-        // Arrange
+
         Long id = 1L;
         ProductDto productDto = new ProductDto();
         productDto.setArticle("12345");
@@ -107,7 +107,7 @@ class ProductControllerTest {
         ProductEntity updatedProduct = new ProductEntity();
         when(productService.updateProduct(id, productDto)).thenReturn(updatedProduct);
 
-        // Act & Assert
+
         mockMvc.perform(put("/products/{id}", id)
                         .contentType(MediaType.APPLICATION_JSON)
                         .content(objectMapper.writeValueAsString(productDto)))
@@ -117,11 +117,11 @@ class ProductControllerTest {
 
     @Test
     void deleteProduct() throws Exception {
-        // Arrange
+
         Long id = 1L;
         doNothing().when(productService).deleteProduct(id);
 
-        // Act & Assert
+
         mockMvc.perform(delete("/products/{id}", id))
                 .andExpect(status().isNoContent());
         verify(productService, times(1)).deleteProduct(id);
